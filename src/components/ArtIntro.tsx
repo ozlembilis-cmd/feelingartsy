@@ -32,6 +32,7 @@ export function ArtIntro({
   onNew,
   onCredits,
   onHelp,
+  onProfile,
 }: {
   artworks: Artwork[];
   returning: boolean;
@@ -39,6 +40,7 @@ export function ArtIntro({
   onNew: () => void;
   onCredits: () => void;
   onHelp: () => void;
+  onProfile: () => void;
 }) {
   const tiles = constellationIds.flatMap(
     (id) => artworks.find((a) => a.id === id) ?? [],
@@ -162,6 +164,9 @@ export function ArtIntro({
           </button>
           <button className="intro-how" onClick={onHelp}>
             How it works
+          </button>
+          <button className="intro-how" onClick={onProfile}>
+            Create my art profile
           </button>
         </div>
         <div className="intro-utilities">

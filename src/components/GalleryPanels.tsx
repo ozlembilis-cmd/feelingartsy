@@ -1,6 +1,13 @@
 import { IconButton } from './Hint';
 import { useState } from 'react';
-import { Search, ArrowRight, Bookmark, Check, CircleDot } from 'lucide-react';
+import {
+  Search,
+  ArrowRight,
+  Bookmark,
+  Check,
+  CircleDot,
+  Palette,
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -194,7 +201,7 @@ export function SettingsPanel({
             Make yourself at home.
           </DialogTitle>
           <DialogDescription>
-            Your settings and reflections stay in this browser.
+            Your gallery is saved in this browser.
           </DialogDescription>
           <div className="settings-section">
             <h2>Your height</h2>
@@ -226,8 +233,10 @@ export function SettingsPanel({
           <div className="settings-section">
             <h2>Your space, your data</h2>
             <p>
-              No account, analytics, or cloud storage. Your height, guesses, and
-              reflections are never sent to an external service.
+              No account or analytics. Your height and guesses stay in this
+              browser. If you choose to create an AI profile, your saved choices
+              and feelings are sent to Mistral. Written reflections are included
+              only if you choose.
             </p>
             {!storageAvailable && (
               <output>
@@ -247,8 +256,8 @@ export function SettingsPanel({
             Clear your gallery data?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This removes your height, saved artwork, and all visits from this
-            browser. This cannot be undone.
+            This removes your height, saved artwork, art profile, and all visits
+            from this browser. This cannot be undone.
           </AlertDialogDescription>
           <div className="form-actions">
             <AlertDialogCancel className="outline-button">
@@ -358,6 +367,7 @@ export function CollectionDrawer({
   onSelect,
   onBookmark,
   pendingCount,
+  onProfile,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -366,6 +376,7 @@ export function CollectionDrawer({
   onSelect: (id: string) => void;
   onBookmark: (id: string) => void;
   pendingCount: number;
+  onProfile: () => void;
 }) {
   const [query, setQuery] = useState(''),
     [view, setView] = useState('available');
@@ -392,6 +403,10 @@ export function CollectionDrawer({
             {artworks.length} available paintings. A collection, not a ranking.
           </SheetDescription>
         </header>
+        <button className="profile-entry" onClick={onProfile}>
+          <Palette size={18} /> <span>Create my art profile</span>{' '}
+          <ArrowRight size={16} />
+        </button>
         <label className="search-field">
           <Search />
           <span className="sr-only">Search by title or artist</span>

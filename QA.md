@@ -48,3 +48,11 @@ The animation listens for reduced-motion preference changes and renders a static
 ## Guide and icon explanations — 7 September 2026
 
 Verified the new How it works dialog from the gallery, its mobile 390×844 layout, the Add your height shortcut, and the concise height explanation. Confirmed an actual pointer hover displays the Settings tooltip and keyboard focus displays the Explore collection explanation; Escape dismisses the tooltip. The existing visit and responses remain intact while opening and closing the guide. An added model test covers migration from saved data without `guideSeen`, dismissal persistence, and reset on a new state.
+
+## Art profile update — 7 September 2026
+
+- 24 tests pass, including distinct-work counting, save-only and sparse profiles, repeated/current visit deduplication, skipped/height/guess exclusion, server input validation, same-origin enforcement, missing-configuration behavior, structured output and catalogue-ID checks, quota handling and no automatic retries. Model API responses in these tests are synthetic fixtures.
+- UI uses the existing accessible dialog and icon tooltip system, responsive CSS, optional reflection sharing, and local result caching. A small counter is shown only after opening the profile.
+- New browser interaction/visual QA was not performed for this update. Existing browser checks above describe the earlier gallery version.
+- No Mistral account/key is available yet. Live model quality, quota, latency, provider configuration, and end-to-end generation remain unverified. The app reports that AI profiles are not connected and continues to show a truthful local summary.
+- Existing gallery storage is retained. Clear my data removes the gallery key and the profile cache. No email or account flow was added.

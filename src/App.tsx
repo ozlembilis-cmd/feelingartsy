@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import {
   Grid2X2,
   SlidersHorizontal,
   ArrowLeft,
   CircleHelp,
+  Palette,
 } from 'lucide-react';
 import {
   Dialog,
@@ -22,6 +23,12 @@ import {
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { IconButton } from './components/Hint';
 import { HowItWorks } from './components/HowItWorks';
+import { collectProfileEvidence, PROFILE_STORAGE_KEY } from './profile';
+const ArtProfilePanel = lazy(() =>
+  import('./components/ArtProfilePanel').then((module) => ({
+    default: module.ArtProfilePanel,
+  })),
+);
 import { ArtIntro } from './components/ArtIntro';
 import { ArtworkStage } from './components/ArtworkStage';
 import { BottomDock } from './components/BottomDock';
@@ -58,6 +65,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
   const [state, setState] = useState(initial);
   const [intro, setIntro] = useState(true);
   const [guideOpen, setGuideOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [collection, setCollection] = useState(false),
     [settings, setSettings] = useState(false),
     [sources, setSources] = useState(false),
@@ -136,6 +144,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
   const clear = () => {
     try {
       window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(PROFILE_STORAGE_KEY);
     } catch {}
     onReset();
   };
@@ -159,6 +168,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
           onNew={() => enter(artworks[(currentIndex + 1) % artworks.length].id)}
           onCredits={() => setCollection(true)}
           onHelp={() => setGuideOpen(true)}
+          onProfile={() => setProfileOpen(true)}
         />
       ) : (
         <>
@@ -184,6 +194,14 @@ function Gallery({ onReset }: { onReset: () => void }) {
               <ArrowLeft />
             </IconButton>
             <nav aria-label="Gallery">
+              <IconButton
+                className="icon-control"
+                aria-label="Create my art profile"
+                hint="See what your saved pieces and feelings have in common."
+                onClick={() => setProfileOpen(true)}
+              >
+                <Palette />
+              </IconButton>
               <IconButton
                 className="icon-control"
                 aria-label="How it works"
@@ -262,6 +280,23 @@ function Gallery({ onReset }: { onReset: () => void }) {
           if (artwork.dimensions) setMode('beside');
         }}
       />
+      {profileOpen && (
+        <Suspense
+          fallback={
+            <output className="storage-notice">Opening your profile…</output>
+          }
+        >
+          <ArtProfilePanel
+            evidence={collectProfileEvidence(state, artworks)}
+            artworks={artworks}
+            onClose={() => setProfileOpen(false)}
+            onSelect={(id) => {
+              setProfileOpen(false);
+              select(id);
+            }}
+          />
+        </Suspense>
+      )}
       <CollectionDrawer
         open={collection}
         onOpenChange={setCollection}
@@ -270,6 +305,10 @@ function Gallery({ onReset }: { onReset: () => void }) {
         onSelect={select}
         onBookmark={(id) => dispatch({ type: 'bookmark', artworkId: id })}
         pendingCount={catalog.length - artworks.length}
+        onProfile={() => {
+          setCollection(false);
+          setProfileOpen(true);
+        }}
       />
       <SettingsPanel
         open={settings}
