@@ -28,6 +28,7 @@ export interface Visit {
 export interface GalleryState {
   version: 1;
   onboarded: boolean;
+  guideSeen: boolean;
   heightCm: number | null;
   units: 'cm' | 'ft';
   current: Visit;
@@ -72,6 +73,7 @@ export function initialState(id: string): GalleryState {
   return {
     version: 1,
     onboarded: false,
+    guideSeen: false,
     heightCm: null,
     units: 'cm',
     current: newVisit(id),
@@ -80,6 +82,7 @@ export function initialState(id: string): GalleryState {
   };
 }
 export type Action =
+  | { type: 'guide-seen'; begin?: boolean }
   | { type: 'first'; response: Response }
   | { type: 'second'; response: Response }
   | { type: 'guess'; value: string }
@@ -106,6 +109,12 @@ export function reducer(state: GalleryState, action: Action): GalleryState {
     current: { ...v, ...patch },
   });
   switch (action.type) {
+    case 'guide-seen':
+      return {
+        ...state,
+        guideSeen: true,
+        onboarded: state.onboarded || !!action.begin,
+      };
     case 'first':
       return v.stage === 'first' ? update({ first: action.response }) : state;
     case 'second':
@@ -269,7 +278,11 @@ export function readState(
       !s.savedIds.every((id) => typeof id === 'string')
     )
       return null;
-    return { ...s, savedIds: s.savedIds.filter((id) => ids.includes(id)) };
+    return {
+      ...s,
+      guideSeen: s.guideSeen === true,
+      savedIds: s.savedIds.filter((id) => ids.includes(id)),
+    };
   } catch {
     return null;
   }

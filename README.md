@@ -61,8 +61,10 @@ The artwork JPEGs and font files are served locally, so the app does not depend 
 
 ## Verification and limitations
 
-See `QA.md` for the exercised journeys and formats. Fifteen automated tests cover transition invariants, skipping, unchanged emotions, independent understanding, persistence, corruption, revisiting, saving, scale geometry, and source/rights readiness. Type checking, lint, and the production build are part of delivery validation.
+See `QA.md` for the exercised journeys and formats. Sixteen automated tests cover transition invariants, skipping, unchanged emotions, independent understanding, persistence, corruption, revisiting, saving, scale geometry, and source/rights readiness. Type checking, lint, and the production build are part of delivery validation.
 
 Known limits: the supplied Guernica photograph is documented for this private gallery; 25 live works have size comparison disabled; very wide handscrolls become small when fully contained (manual zoom is available); images are optimized viewing reproductions, not museum-grade gigapixel assets; local data does not sync or survive browser-data deletion. Text and accessibility were checked through the browser accessibility tree and keyboard use, not a full audit with every screen-reader/device combination.
 
 The opening animation has a pause control, pauses when a painting receives keyboard focus, and becomes static when the browser requests reduced motion. Height setup is optional and appears through the size tool or Settings. The original local-storage key is retained so existing responses survive this redesign.
+
+A subtle **How it works** link opens the short guide from the intro; the gallery’s question-mark icon reopens it. The guide appears automatically on the first entry until dismissed. Its `guideSeen` preference is saved with the existing browser data and resets with Clear my data. Older saved visits are migrated without losing responses. Icon tooltips explain actions on hover and keyboard focus; the guide provides the same essential orientation for touch users.

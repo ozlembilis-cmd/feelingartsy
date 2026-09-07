@@ -1,3 +1,4 @@
+import { IconButton } from './Hint';
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
@@ -167,14 +168,15 @@ export function StorySheet({
         <button className="primary-button" onClick={onAgain}>
           Look again <ArrowRight />
         </button>
-        <button
+        <IconButton
           className="text-button next-button icon-control"
           aria-label="Next artwork"
+          hint="Move on whenever you like."
           title="Next artwork"
           onClick={onNext}
         >
           <ArrowRight />
-        </button>
+        </IconButton>
       </div>
     </section>
   );
@@ -213,14 +215,15 @@ export function BottomDock({
       />
     );
   const next = (
-    <button
+    <IconButton
       className="text-button next-button icon-control"
       aria-label="Next artwork"
+      hint="Move on whenever you like."
       title="Next artwork"
       onClick={onNext}
     >
       <ArrowRight />
-    </button>
+    </IconButton>
   );
   if (visit.stage === 'saved')
     return (
@@ -317,26 +320,28 @@ export function BottomDock({
           }
         />
         <div className="reaction-secondary">
-          <button
+          <IconButton
             className="text-button"
             title="My own words"
             aria-label="My own words"
+            hint="Write your reaction in your own words."
             aria-expanded={own}
             onClick={() => setOwn((o) => !o)}
           >
             <PencilLine size={14} />
-          </button>
+          </IconButton>
 
           {first && artwork.artistChoices.length > 0 ? (
-            <button
+            <IconButton
               className="text-button"
               title="Guess the artist?"
               aria-label="Guess the artist?"
+              hint="An optional guess. There’s no score."
               aria-expanded={guessOpen}
               onClick={() => setGuessOpen((g) => !g)}
             >
               <CircleHelp />
-            </button>
+            </IconButton>
           ) : !first && hasResponse(visit.first) ? (
             <button
               className="text-button"
@@ -345,16 +350,17 @@ export function BottomDock({
               I feel the same
             </button>
           ) : null}
-          <button
+          <IconButton
             className="text-button skip"
             title="Skip response"
             aria-label="Skip response"
+            hint="Continue without recording a response."
             onClick={() =>
               dispatch({ type: first ? 'discover' : 'reflect', skip: true })
             }
           >
             <SkipForward />
-          </button>
+          </IconButton>
         </div>
         {own && (
           <div className="own-words">
@@ -401,14 +407,19 @@ export function BottomDock({
         )}
       </div>
       <div className="dock-actions">
-        <button
+        <IconButton
           className="primary-button primary-icon"
           title={first ? 'Discover the story' : 'Reflect for a moment'}
           aria-label={first ? 'Discover the story' : 'Reflect for a moment'}
+          hint={
+            first
+              ? 'Read what’s behind this painting.'
+              : 'Leave a note about what stands out now.'
+          }
           onClick={() => dispatch({ type: first ? 'discover' : 'reflect' })}
         >
           {first ? <BookOpen /> : <MessageCircle />}
-        </button>
+        </IconButton>
         {next}
       </div>
     </section>

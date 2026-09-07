@@ -4,7 +4,7 @@ Checked on 6 September 2026 (America/Los_Angeles).
 
 ## Automated checks
 
-15 tests in `tests/` exercise:
+16 tests in `tests/` exercise:
 
 - initial unanswered state versus an explicit “Nothing in particular” response;
 - multi-selection, exclusivity, and no automatic stage advancement;
@@ -44,3 +44,7 @@ Verified the supplied Guernica image in the live queue, its full uncropped aspec
 At 200% root text size on mobile, the intro prompt wraps beside its icons and reaction controls wrap without horizontal overflow (document width 390px, dock scroll width 360px). A resize-related hidden-container scroll offset was fixed with non-scrollable clipping; the artwork and header stay in place. The temporary enlarged-text stylesheet was removed before the final build.
 
 The animation listens for reduced-motion preference changes and renders a static composition when requested. Its pause control was exercised; OS-level reduced-motion emulation remains unavailable in the browser tool. These checks supplement the original flow coverage above, not a full device or screen-reader audit.
+
+## Guide and icon explanations — 7 September 2026
+
+Verified the new How it works dialog from the gallery, its mobile 390×844 layout, the Add your height shortcut, and the concise height explanation. Confirmed an actual pointer hover displays the Settings tooltip and keyboard focus displays the Explore collection explanation; Escape dismisses the tooltip. The existing visit and responses remain intact while opening and closing the guide. An added model test covers migration from saved data without `guideSeen`, dismissal persistence, and reset on a new state.

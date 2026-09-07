@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Pause, Play, Shuffle, Info } from 'lucide-react';
+import { IconButton } from './Hint';
 import type { Artwork } from '../content/types';
 
 // A small curated constellation. Every tile is a real painting in the collection.
@@ -30,12 +31,14 @@ export function ArtIntro({
   onEnter,
   onNew,
   onCredits,
+  onHelp,
 }: {
   artworks: Artwork[];
   returning: boolean;
   onEnter: (artworkId?: string) => void;
   onNew: () => void;
   onCredits: () => void;
+  onHelp: () => void;
 }) {
   const tiles = constellationIds.flatMap(
     (id) => artworks.find((a) => a.id === id) ?? [],
@@ -150,38 +153,45 @@ export function ArtIntro({
         artsy?
       </h1>
       <div className="intro-footer">
-        <button className="intro-prompt" onClick={() => onEnter()}>
-          {returning ? 'Click anywhere to continue' : 'Click anywhere to begin'}{' '}
-          <ArrowUpRight />
-        </button>
+        <div className="intro-entry-copy">
+          <button className="intro-prompt" onClick={() => onEnter()}>
+            {returning
+              ? 'Click anywhere to continue'
+              : 'Click anywhere to begin'}{' '}
+            <ArrowUpRight />
+          </button>
+          <button className="intro-how" onClick={onHelp}>
+            How it works
+          </button>
+        </div>
         <div className="intro-utilities">
           {returning && (
-            <button
+            <IconButton
               className="icon-control"
               title="Something new"
               aria-label="Something new"
               onClick={onNew}
             >
               <Shuffle />
-            </button>
+            </IconButton>
           )}
-          <button
+          <IconButton
             className="icon-control"
             title="Collection & image credits"
             aria-label="Collection and image credits"
             onClick={onCredits}
           >
             <Info />
-          </button>
+          </IconButton>
           {!reduced && (
-            <button
+            <IconButton
               className="icon-control"
               title={paused ? 'Play animation' : 'Pause animation'}
               aria-label={paused ? 'Play animation' : 'Pause animation'}
               onClick={() => setPaused((v) => !v)}
             >
               {paused ? <Play /> : <Pause />}
-            </button>
+            </IconButton>
           )}
         </div>
       </div>

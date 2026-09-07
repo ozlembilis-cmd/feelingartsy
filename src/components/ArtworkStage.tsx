@@ -1,3 +1,4 @@
+import { IconButton, Hint } from './Hint';
 /* oxlint-disable jsx-a11y/prefer-tag-over-role, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- The labeled group is an intentionally focusable zoom/pan canvas; native HTML has no equivalent. Inline SVG uses an explicit accessible image role. */
 import { useState, useRef, useEffect } from 'react';
 import {
@@ -164,14 +165,15 @@ export function ArtworkStage({
     >
       {justLook && (
         <div className="stage-top">
-          <button
+          <IconButton
             className="icon-control"
             aria-label="Show controls"
+            hint="Return to reactions and viewing tools."
             title="Show controls"
             onClick={onJustLook}
           >
             <Minimize />
-          </button>
+          </IconButton>
         </div>
       )}
       <div
@@ -274,72 +276,98 @@ export function ArtworkStage({
           }}
         >
           <TabsList className="mode-switch">
-            <TabsTrigger
-              value="full"
-              aria-label="Full artwork"
-              title="Full artwork"
-            >
-              <Image />
-            </TabsTrigger>
-            <TabsTrigger
-              value="beside"
-              aria-label="Beside you"
-              disabled={!artwork.dimensions}
-              title={
-                !artwork.dimensions
-                  ? 'Size comparison unavailable: verified dimensions must match the image.'
-                  : 'Beside you'
+            <Hint label="Full artwork" description="See the complete image.">
+              <TabsTrigger
+                value="full"
+                className="artwork-mode-button"
+                aria-label="Full artwork"
+              >
+                <Image />
+              </TabsTrigger>
+            </Hint>
+            <Hint
+              label={
+                artwork.dimensions
+                  ? 'See its size beside you'
+                  : 'Size comparison unavailable'
               }
+              description={
+                artwork.dimensions
+                  ? 'Add your height to compare proportions.'
+                  : 'The artwork’s dimensions must match the photograph.'
+              }
+              disabled={!artwork.dimensions}
             >
-              <Ruler />
-            </TabsTrigger>
+              <TabsTrigger
+                value="beside"
+                className="artwork-mode-button"
+                aria-label="Beside you"
+                disabled={!artwork.dimensions}
+              >
+                <Ruler />
+              </TabsTrigger>
+            </Hint>
           </TabsList>
         </Tabs>
-        <button
+        <IconButton
           className="image-credit icon-control"
           aria-label="Image credit & permissions"
+          hint="Credits, permissions, and museum sources."
           title="Image credit & permissions"
           onClick={onCredits}
         >
           <Info />
-        </button>
+        </IconButton>
         <div className="zoom-tools">
-          <button
+          <IconButton
             title="Zoom out"
             aria-label="Zoom out"
+            hint="See more of the painting."
             disabled={zoom === 1 || mode === 'beside'}
             onClick={() => adjust(zoom - 0.25)}
           >
             <Minus />
-          </button>
+          </IconButton>
           <span className="zoom-value sr-only" aria-live="polite">
             {Math.round(zoom * 100)}%
           </span>
-          <button
+          <IconButton
             title="Zoom in"
             aria-label="Zoom in"
+            hint="Then drag or use the arrow keys to explore."
             disabled={zoom === 4 || mode === 'beside'}
             onClick={() => adjust(zoom + 0.25)}
           >
             <Plus />
-          </button>
-          <button title="Reset view" aria-label="Reset view" onClick={reset}>
+          </IconButton>
+          <IconButton
+            title="Reset view"
+            aria-label="Reset view"
+            hint="Reset the zoom and position."
+            onClick={reset}
+          >
             <Scan />
-          </button>
-          <button title="Just look" aria-label="Just look" onClick={onJustLook}>
+          </IconButton>
+          <IconButton
+            title="Just look"
+            aria-label="Just look"
+            hint="Hide the controls. Press Escape to bring them back."
+            onClick={onJustLook}
+          >
             <Expand />
-          </button>
+          </IconButton>
         </div>
       </div>
       {justLook && (
-        <button
+        <IconButton
           className="quiet-credit icon-control"
           aria-label="Image credit & permissions"
+          hint="Credits, permissions, and museum sources."
           title="Image credit & permissions"
           onClick={onCredits}
         >
           <Info />
-        </button>
+        </IconButton>
       )}
     </section>
   );

@@ -1,5 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { Grid2X2, SlidersHorizontal, ArrowLeft } from 'lucide-react';
+import {
+  Grid2X2,
+  SlidersHorizontal,
+  ArrowLeft,
+  CircleHelp,
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,6 +19,9 @@ import {
   STORAGE_KEY,
   type Action,
 } from './model';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { IconButton } from './components/Hint';
+import { HowItWorks } from './components/HowItWorks';
 import { ArtIntro } from './components/ArtIntro';
 import { ArtworkStage } from './components/ArtworkStage';
 import { BottomDock } from './components/BottomDock';
@@ -34,7 +42,9 @@ function load() {
 export default function App() {
   const [generation, setGeneration] = useState(0);
   return (
-    <Gallery key={generation} onReset={() => setGeneration((g) => g + 1)} />
+    <TooltipProvider delay={250}>
+      <Gallery key={generation} onReset={() => setGeneration((g) => g + 1)} />
+    </TooltipProvider>
   );
 }
 function Gallery({ onReset }: { onReset: () => void }) {
@@ -47,6 +57,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
   );
   const [state, setState] = useState(initial);
   const [intro, setIntro] = useState(true);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [collection, setCollection] = useState(false),
     [settings, setSettings] = useState(false),
     [sources, setSources] = useState(false),
@@ -98,6 +109,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
     return () => window.removeEventListener('keydown', key);
   }, []);
   const select = (id: string) => {
+    if (intro && !state.guideSeen) setGuideOpen(true);
     dispatch({ type: state.onboarded ? 'next' : 'begin', artworkId: id });
     setMode('full');
     setCollection(false);
@@ -105,6 +117,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
     setJustLook(false);
   };
   const enter = (id?: string) => {
+    if (!state.guideSeen) setGuideOpen(true);
     if (!state.onboarded) {
       dispatch({ type: 'begin', artworkId: id });
     } else if (id) {
@@ -113,6 +126,11 @@ function Gallery({ onReset }: { onReset: () => void }) {
     setMode('full');
     setJustLook(false);
     setIntro(false);
+  };
+  const closeGuide = (start = false) => {
+    dispatch({ type: 'guide-seen', begin: start });
+    setGuideOpen(false);
+    if (start) setIntro(false);
   };
   const next = () => select(artworks[(currentIndex + 1) % artworks.length].id);
   const clear = () => {
@@ -140,6 +158,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
           onEnter={enter}
           onNew={() => enter(artworks[(currentIndex + 1) % artworks.length].id)}
           onCredits={() => setCollection(true)}
+          onHelp={() => setGuideOpen(true)}
         />
       ) : (
         <>
@@ -153,7 +172,7 @@ function Gallery({ onReset }: { onReset: () => void }) {
             Skip to interaction
           </a>
           <header className="topbar">
-            <button
+            <IconButton
               className="icon-control"
               aria-label="Back to intro"
               title="Back to intro"
@@ -163,24 +182,34 @@ function Gallery({ onReset }: { onReset: () => void }) {
               }}
             >
               <ArrowLeft />
-            </button>
+            </IconButton>
             <nav aria-label="Gallery">
-              <button
+              <IconButton
+                className="icon-control"
+                aria-label="How it works"
+                hint="A quick guide to looking, guessing, and feeling."
+                onClick={() => setGuideOpen(true)}
+              >
+                <CircleHelp />
+              </IconButton>
+              <IconButton
                 className="icon-control"
                 aria-label="Explore collection"
+                hint="Browse paintings, saved works, and past visits."
                 title="Explore collection"
                 onClick={() => setCollection(true)}
               >
                 <Grid2X2 />
-              </button>
-              <button
+              </IconButton>
+              <IconButton
                 className="icon-control"
                 aria-label="Settings"
+                hint="Your height and browser data."
                 title="Settings"
                 onClick={() => setSettings(true)}
               >
                 <SlidersHorizontal />
-              </button>
+              </IconButton>
             </nav>
           </header>
           <ArtworkStage
@@ -223,6 +252,16 @@ function Gallery({ onReset }: { onReset: () => void }) {
           session only.
         </output>
       )}
+      <HowItWorks
+        open={guideOpen}
+        onDismiss={() => closeGuide()}
+        onStart={() => closeGuide(true)}
+        onHeight={() => {
+          closeGuide(true);
+          setHeightPrompt(true);
+          if (artwork.dimensions) setMode('beside');
+        }}
+      />
       <CollectionDrawer
         open={collection}
         onOpenChange={setCollection}
@@ -251,7 +290,8 @@ function Gallery({ onReset }: { onReset: () => void }) {
             See its size beside you.
           </DialogTitle>
           <DialogDescription>
-            How tall are you? This stays only in your browser.
+            Enter your height to compare the artwork’s dimensions with a person
+            your size. Your height stays in this browser.
           </DialogDescription>
           <HeightForm
             key={`${state.heightCm}-${heightPrompt}`}
@@ -265,8 +305,8 @@ function Gallery({ onReset }: { onReset: () => void }) {
             saveLabel="Use this height"
           />
           <p className="muted">
-            If you skip, the diagram uses a clearly labeled 170 cm reference
-            person.
+            This shows proportions, not actual size on your screen. Skip to use
+            a 170 cm reference person.
           </p>
         </DialogContent>
       </Dialog>

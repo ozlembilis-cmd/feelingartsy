@@ -204,3 +204,27 @@ test('choosing a painting in the intro begins there without creating a phantom v
   assert.equal(started.current.first, null);
   assert.equal(started.visits.length, 0);
 });
+
+test('the guide can be dismissed once without changing responses, including older saved data', () => {
+  const original = reducer(initialState('starry-night'), {
+    type: 'first',
+    response: { feelings: ['Curious'], words: '' },
+  });
+  const legacy: Partial<typeof original> = { ...original };
+  delete legacy.guideSeen;
+  const restored = readState({ getItem: () => JSON.stringify(legacy) }, [
+    'starry-night',
+  ])!;
+  assert.equal(restored.guideSeen, false);
+  assert.deepEqual(restored.current, original.current);
+  const seen = reducer(restored, { type: 'guide-seen', begin: true });
+  assert.equal(seen.guideSeen, true);
+  assert.equal(seen.onboarded, true);
+  assert.deepEqual(seen.current, original.current);
+  assert.equal(
+    readState({ getItem: () => JSON.stringify(seen) }, ['starry-night'])
+      ?.guideSeen,
+    true,
+  );
+  assert.equal(initialState('starry-night').guideSeen, false);
+});

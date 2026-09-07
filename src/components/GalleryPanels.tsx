@@ -1,3 +1,4 @@
+import { IconButton } from './Hint';
 import { useState } from 'react';
 import { Search, ArrowRight, Bookmark, Check, CircleDot } from 'lucide-react';
 import {
@@ -447,14 +448,14 @@ export function CollectionDrawer({
                         </div>
                         <ArrowRight />
                       </button>
-                      <button
+                      <IconButton
                         className="icon-button bookmark-toggle"
                         aria-label={`${saved ? 'Remove' : 'Save'} ${a.title} ${saved ? 'from' : 'to'} my collection`}
                         aria-pressed={saved}
                         onClick={() => onBookmark(a.id)}
                       >
                         {saved ? <Check /> : <Bookmark />}
-                      </button>
+                      </IconButton>
                       {view === 'visited' && visits.length > 0 && (
                         <details className="visit-history">
                           <summary>
