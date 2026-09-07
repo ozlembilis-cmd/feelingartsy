@@ -192,3 +192,15 @@ test('clear data removes only this app key and a new gallery begins with no pers
   assert.deepEqual(s.visits, []);
   assert.equal(s.onboarded, false);
 });
+
+test('choosing a painting in the intro begins there without creating a phantom visit', () => {
+  const started = reducer(initialState('guernica'), {
+    type: 'begin',
+    artworkId: 'starry-night',
+  });
+  assert.equal(started.onboarded, true);
+  assert.equal(started.current.artworkId, 'starry-night');
+  assert.equal(started.current.stage, 'first');
+  assert.equal(started.current.first, null);
+  assert.equal(started.visits.length, 0);
+});

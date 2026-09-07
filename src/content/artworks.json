@@ -438,26 +438,22 @@
     "collection": "Museo Nacional Centro de Arte Reina Sofía",
     "culture": "Spain",
     "period": "Modernism",
-    "dimensions": {
-      "widthCm": 776.6,
-      "heightCm": 349.3,
-      "source": "https://www.museoreinasofia.es/colecciones/obra/guernica/",
-      "note": "Museum dimensions are height 349.3 × width 776.6 cm."
-    },
+    "dimensions": null,
     "verifiedArtworkDimensions": {
       "widthCm": 776.6,
       "heightCm": 349.3,
       "source": "https://www.museoreinasofia.es/colecciones/obra/guernica/"
     },
     "image": {
-      "src": "",
-      "alt": "A wide monochrome painting of fragmented people and animals, including a horse and a mother holding a child.",
-      "source": "https://www.museoreinasofia.es/colecciones/obra/guernica/",
-      "credit": "© Sucesión Pablo Picasso, VEGAP, Madrid, 2026",
-      "license": "Permission required",
-      "permissionUrl": "https://guernica.museoreinasofia.es/en/legal-notice",
-      "review": "pending",
-      "reviewedAt": "2026-09-06"
+      "src": "/artworks/guernica-user-photo.jpg",
+      "alt": "A wide monochrome painting with fragmented people and animals, photographed at an angle on a museum wall with the surrounding wall and floor visible.",
+      "source": "/artworks/guernica-user-photo.jpg",
+      "credit": "Photograph supplied by the site owner. Artwork © Sucesión Pablo Picasso.",
+      "license": "Owner-supplied photograph, included at their request in this private gallery. Artwork copyright retained; no third-party reuse license granted.",
+      "permissionUrl": "/credits/guernica-photo.txt",
+      "review": "approved",
+      "reviewedAt": "2026-09-07",
+      "provenance": "user-supplied"
     },
     "story": {
       "behind": "In April 1937, German and Italian aircraft bombed the Basque town of Guernica during the Spanish Civil War. News of the attack prompted Picasso to create this painting.",
@@ -480,8 +476,8 @@
         "url": "https://guernica.museoreinasofia.es/en"
       }
     ],
-    "status": "rights-pending",
-    "statusNote": "The museum’s Rethinking Guernica legal notice explicitly requires a license from the copyright holders or their representatives for reproduction, distribution or public communication of artwork images. No permission for this public website reproduction has been established."
+    "status": "published",
+    "statusNote": "Size comparison is unavailable for this photograph because the painting is shown in perspective with surrounding wall and floor. The verified canvas is 776.6 × 349.3 cm; those measurements do not describe this photo’s full extent."
   },
   {
     "id": "aic-27992",

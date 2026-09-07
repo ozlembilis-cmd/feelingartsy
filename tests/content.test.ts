@@ -10,15 +10,17 @@ const catalog: Artwork[] = JSON.parse(
   ),
 );
 const live = catalog.filter((a) => a.status === 'published');
-test('100 unique sourced records, exactly 99 live, rights-pending Guernica excluded', () => {
+test('100 sourced live paintings including the owner-supplied Guernica photograph', () => {
   assert.equal(catalog.length, 100);
   assert.equal(new Set(catalog.map((a) => a.id)).size, 100);
-  assert.equal(live.length, 99);
-  assert.equal(
-    catalog.find((a) => a.id === 'guernica')?.status,
-    'rights-pending',
-  );
-  assert.equal(catalog.find((a) => a.id === 'guernica')?.image.src, '');
+  assert.equal(live.length, 100);
+  assert.equal(catalog.find((a) => a.id === 'guernica')?.status, 'published');
+  const g = catalog.find((a) => a.id === 'guernica')!;
+  assert.equal(g.image.provenance, 'user-supplied');
+  assert.equal(g.dimensions, null);
+  assert.equal(g.verifiedArtworkDimensions?.widthCm, 776.6);
+  assert.match(g.image.license, /private gallery/);
+  assert.equal(g.image.src, '/artworks/guernica-user-photo.jpg');
 });
 test('every live work has original editorial content, alt text, real local image and per-asset rights', () => {
   for (const a of live) {
@@ -46,7 +48,9 @@ test('every live work has original editorial content, alt text, real local image
       a.image.permissionUrl,
       a.image.source,
     ])
-      assert.equal(new URL(url).protocol, 'https:');
+      if (a.image.provenance === 'user-supplied' && url.startsWith('/')) {
+        assert.ok(existsSync(resolve('public', url.slice(1))), url);
+      } else assert.equal(new URL(url).protocol, 'https:');
     assert.ok(a.image.alt.length > 25, a.id);
     assert.ok(existsSync(resolve('public', a.image.src.slice(1))), a.id);
     const words = [a.story.behind, a.story.matters, a.story.closer]

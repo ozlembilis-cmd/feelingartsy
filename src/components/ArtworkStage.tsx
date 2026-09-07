@@ -1,8 +1,9 @@
 /* oxlint-disable jsx-a11y/prefer-tag-over-role, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- The labeled group is an intentionally focusable zoom/pan canvas; native HTML has no equivalent. Inline SVG uses an explicit accessible image role. */
 import { useState, useRef, useEffect } from 'react';
 import {
-  Eye,
-  EyeOff,
+  Info,
+  Image,
+  Minimize,
   Minus,
   Plus,
   Scan,
@@ -109,7 +110,6 @@ export function ScaleDiagram({
 }
 export function ArtworkStage({
   artwork,
-  revealed,
   justLook,
   onJustLook,
   mode,
@@ -120,7 +120,6 @@ export function ArtworkStage({
   onCredits,
 }: {
   artwork: Artwork;
-  revealed: boolean;
   justLook: boolean;
   onJustLook: () => void;
   mode: 'full' | 'beside';
@@ -163,17 +162,18 @@ export function ArtworkStage({
       className={`artwork-stage ${justLook ? 'quiet-stage' : ''}`}
       aria-label="Artwork viewing area"
     >
-      <div className="stage-top">
-        <span className="eyebrow">
-          {revealed
-            ? 'A FAMILIAR PAINTING. ANOTHER LOOK.'
-            : 'AN OPEN MIND. A FIRST LOOK.'}
-        </span>
-        <button className="text-button" onClick={onJustLook}>
-          {justLook ? <EyeOff /> : <Eye />}
-          {justLook ? 'Show controls' : 'Just look'}
-        </button>
-      </div>
+      {justLook && (
+        <div className="stage-top">
+          <button
+            className="icon-control"
+            aria-label="Show controls"
+            title="Show controls"
+            onClick={onJustLook}
+          >
+            <Minimize />
+          </button>
+        </div>
+      )}
       <div
         className={`painting-viewport ${zoom > 1 ? 'can-pan' : ''}`}
         ref={viewport}
@@ -274,51 +274,71 @@ export function ArtworkStage({
           }}
         >
           <TabsList className="mode-switch">
-            <TabsTrigger value="full">Full artwork</TabsTrigger>
+            <TabsTrigger
+              value="full"
+              aria-label="Full artwork"
+              title="Full artwork"
+            >
+              <Image />
+            </TabsTrigger>
             <TabsTrigger
               value="beside"
+              aria-label="Beside you"
               disabled={!artwork.dimensions}
               title={
                 !artwork.dimensions
                   ? 'Size comparison unavailable: verified dimensions must match the image.'
-                  : undefined
+                  : 'Beside you'
               }
             >
-              <Ruler size={13} />
-              Beside you
+              <Ruler />
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <button className="image-credit" onClick={onCredits}>
-          Image credit & permissions <span aria-hidden="true">↗</span>
+        <button
+          className="image-credit icon-control"
+          aria-label="Image credit & permissions"
+          title="Image credit & permissions"
+          onClick={onCredits}
+        >
+          <Info />
         </button>
         <div className="zoom-tools">
           <button
+            title="Zoom out"
             aria-label="Zoom out"
             disabled={zoom === 1 || mode === 'beside'}
             onClick={() => adjust(zoom - 0.25)}
           >
             <Minus />
           </button>
-          <span aria-live="polite">{Math.round(zoom * 100)}%</span>
+          <span className="zoom-value sr-only" aria-live="polite">
+            {Math.round(zoom * 100)}%
+          </span>
           <button
+            title="Zoom in"
             aria-label="Zoom in"
             disabled={zoom === 4 || mode === 'beside'}
             onClick={() => adjust(zoom + 0.25)}
           >
             <Plus />
           </button>
-          <button aria-label="Reset view" onClick={reset}>
+          <button title="Reset view" aria-label="Reset view" onClick={reset}>
             <Scan />
           </button>
-          <button aria-label="Just look" onClick={onJustLook}>
+          <button title="Just look" aria-label="Just look" onClick={onJustLook}>
             <Expand />
           </button>
         </div>
       </div>
       {justLook && (
-        <button className="quiet-credit" onClick={onCredits}>
-          Image credit & permissions
+        <button
+          className="quiet-credit icon-control"
+          aria-label="Image credit & permissions"
+          title="Image credit & permissions"
+          onClick={onCredits}
+        >
+          <Info />
         </button>
       )}
     </section>

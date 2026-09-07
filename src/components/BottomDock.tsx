@@ -5,6 +5,16 @@ import {
   Bookmark,
   Check,
   PencilLine,
+  BookOpen,
+  MessageCircle,
+  SkipForward,
+  CircleHelp,
+  Smile,
+  Activity,
+  Search,
+  Heart,
+  Waves,
+  CircleMinus,
 } from 'lucide-react';
 import type { Artwork } from '../content/types';
 import {
@@ -17,6 +27,7 @@ import {
   type Visit,
   type Action,
 } from '../model';
+const feelingIcons = [Smile, Activity, Search, Heart, Waves, CircleMinus];
 export function ReactionControls({
   value,
   onChange,
@@ -29,15 +40,18 @@ export function ReactionControls({
       className="reaction-chips"
       aria-label="Feelings, choose any that fit"
     >
-      {feelings.map((f) => (
-        <button
-          key={f}
-          aria-pressed={value?.feelings.includes(f) ?? false}
-          onClick={() => onChange(toggleFeeling(value, f))}
-        >
-          {f}
-        </button>
-      ))}
+      {feelings.map((f, i) => {
+        const Icon = feelingIcons[i];
+        return (
+          <button
+            key={f}
+            aria-pressed={value?.feelings.includes(f) ?? false}
+            onClick={() => onChange(toggleFeeling(value, f))}
+          >
+            <Icon aria-hidden="true" /> {f}
+          </button>
+        );
+      })}
     </fieldset>
   );
 }
@@ -87,7 +101,6 @@ export function StorySheet({
   return (
     <section className="bottom-dock story-sheet" aria-label="The story">
       <div className="story-title">
-        <span className="eyebrow">BEYOND THE FIRST IMPRESSION</span>
         <h1 tabIndex={-1} ref={heading}>
           {artwork.title}
         </h1>
@@ -154,8 +167,13 @@ export function StorySheet({
         <button className="primary-button" onClick={onAgain}>
           Look again <ArrowRight />
         </button>
-        <button className="text-button next-button" onClick={onNext}>
-          Next artwork <ArrowRight />
+        <button
+          className="text-button next-button icon-control"
+          aria-label="Next artwork"
+          title="Next artwork"
+          onClick={onNext}
+        >
+          <ArrowRight />
         </button>
       </div>
     </section>
@@ -195,17 +213,21 @@ export function BottomDock({
       />
     );
   const next = (
-    <button className="text-button next-button" onClick={onNext}>
-      Next artwork <ArrowRight />
+    <button
+      className="text-button next-button icon-control"
+      aria-label="Next artwork"
+      title="Next artwork"
+      onClick={onNext}
+    >
+      <ArrowRight />
     </button>
   );
   if (visit.stage === 'saved')
     return (
       <section className="bottom-dock saved-dock">
         <div className="dock-question">
-          <span className="eyebrow">A MOMENT, KEPT</span>
           <h1 tabIndex={-1} ref={heading}>
-            Your second look.
+            A moment, kept.
           </h1>
           <p>Saved in this browser.</p>
         </div>
@@ -229,13 +251,9 @@ export function BottomDock({
     return (
       <section className="bottom-dock reflection-dock">
         <div className="dock-question">
-          <span className="eyebrow">03 / A MOMENT TO REFLECT</span>
           <h1 tabIndex={-1} ref={heading}>
-            Did anything change
-            <br />
-            in how you see it?
+            Did anything change?
           </h1>
-          <p>A note is optional. Every response is valid.</p>
         </div>
         <div className="reflection-fields">
           <fieldset
@@ -287,19 +305,9 @@ export function BottomDock({
   return (
     <section className="bottom-dock">
       <div className="dock-question">
-        <span className="eyebrow">
-          {first ? '01 / FIRST IMPRESSION' : '02 / ANOTHER LOOK'}
-        </span>
         <h1 tabIndex={-1} ref={heading}>
-          {first
-            ? 'What’s your first reaction?'
-            : 'Looking again, what do you feel?'}
+          {first ? 'First feeling?' : 'And now?'}
         </h1>
-        <p>
-          {first
-            ? 'There’s no right way to feel.'
-            : 'A different feeling. The same feeling. Both are welcome.'}
-        </p>
       </div>
       <div className="reaction-area">
         <ReactionControls
@@ -311,20 +319,23 @@ export function BottomDock({
         <div className="reaction-secondary">
           <button
             className="text-button"
+            title="My own words"
+            aria-label="My own words"
             aria-expanded={own}
             onClick={() => setOwn((o) => !o)}
           >
             <PencilLine size={14} />
-            My own words
           </button>
-          <span aria-hidden="true">·</span>
+
           {first && artwork.artistChoices.length > 0 ? (
             <button
               className="text-button"
+              title="Guess the artist?"
+              aria-label="Guess the artist?"
               aria-expanded={guessOpen}
               onClick={() => setGuessOpen((g) => !g)}
             >
-              Guess the artist?
+              <CircleHelp />
             </button>
           ) : !first && hasResponse(visit.first) ? (
             <button
@@ -336,11 +347,13 @@ export function BottomDock({
           ) : null}
           <button
             className="text-button skip"
+            title="Skip response"
+            aria-label="Skip response"
             onClick={() =>
               dispatch({ type: first ? 'discover' : 'reflect', skip: true })
             }
           >
-            Skip
+            <SkipForward />
           </button>
         </div>
         {own && (
@@ -389,11 +402,12 @@ export function BottomDock({
       </div>
       <div className="dock-actions">
         <button
-          className="primary-button"
+          className="primary-button primary-icon"
+          title={first ? 'Discover the story' : 'Reflect for a moment'}
+          aria-label={first ? 'Discover the story' : 'Reflect for a moment'}
           onClick={() => dispatch({ type: first ? 'discover' : 'reflect' })}
         >
-          {first ? 'Discover the story' : 'Reflect for a moment'}
-          <ArrowRight />
+          {first ? <BookOpen /> : <MessageCircle />}
         </button>
         {next}
       </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ArrowRight, Bookmark, Check, Eye } from 'lucide-react';
+import { Search, ArrowRight, Bookmark, Check, CircleDot } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -313,14 +313,18 @@ export function SourcesPanel({
             {artwork.image.license} · Reviewed {artwork.image.reviewedAt}
           </p>
           <a href={artwork.image.source} target="_blank" rel="noreferrer">
-            Original image record ↗
+            {artwork.image.provenance === 'user-supplied'
+              ? 'Supplied photograph ↗'
+              : 'Original image record ↗'}
           </a>
           <a
             href={artwork.image.permissionUrl}
             target="_blank"
             rel="noreferrer"
           >
-            Permission evidence ↗
+            {artwork.image.provenance === 'user-supplied'
+              ? 'Photograph use record ↗'
+              : 'Permission evidence ↗'}
           </a>
         </section>
         <section>
@@ -437,7 +441,7 @@ export function CollectionDrawer({
                           <span>{a.date}</span>
                           {a.id === state.current.artworkId && (
                             <span className="currently-viewing">
-                              <Eye size={12} /> Currently viewing
+                              <CircleDot size={12} /> Currently viewing
                             </span>
                           )}
                         </div>

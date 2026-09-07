@@ -4,7 +4,7 @@ Checked on 6 September 2026 (America/Los_Angeles).
 
 ## Automated checks
 
-14 tests in `tests/` exercise:
+15 tests in `tests/` exercise:
 
 - initial unanswered state versus an explicit “Nothing in particular” response;
 - multi-selection, exclusivity, and no automatic stage advancement;
@@ -34,3 +34,13 @@ A temporary missing-image source was introduced and restored to exercise failure
 Text enlargement was forced to a 32px root (200% of the normal size). On mobile it remains horizontally contained, with a larger scrollable viewing area and wrapped controls. The test style was removed. Reduced-motion CSS disables animations and transitions for `prefers-reduced-motion: reduce`; the CSS rule was checked, but the browser connector does not expose OS-level media emulation. This is not a comprehensive screen-reader or physical-device certification.
 
 The local test data is disposable and separate from the deployed origin. No personal responses are seeded into source code or the deployed app.
+
+## Immersive redesign — 7 September 2026
+
+Checked the new floating-artwork intro at desktop 1440×900, the normal 667-pixel panel, and mobile 390×844. Pause changes the control to Play; painting selection opens that exact work. Tab then Return enters the gallery and resumes the saved visit. The headline uses the local Inter Tight variable font. Background and tile entry lead directly into the existing journey, with no height onboarding gate.
+
+Verified the supplied Guernica image in the live queue, its full uncropped aspect ratio, blurred background extension, and disabled size tool for its angled museum photograph. Completed Curious → story → I feel the same → understand more → save, then reloaded and resumed the same comparison. Just look hides the dock and chrome while keeping restore and credits available. The original browser storage key and visit history model are retained.
+
+At 200% root text size on mobile, the intro prompt wraps beside its icons and reaction controls wrap without horizontal overflow (document width 390px, dock scroll width 360px). A resize-related hidden-container scroll offset was fixed with non-scrollable clipping; the artwork and header stay in place. The temporary enlarged-text stylesheet was removed before the final build.
+
+The animation listens for reduced-motion preference changes and renders a static composition when requested. Its pause control was exercised; OS-level reduced-motion emulation remains unavailable in the browser tool. These checks supplement the original flow coverage above, not a full device or screen-reader audit.

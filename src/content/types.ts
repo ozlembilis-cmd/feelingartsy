@@ -18,6 +18,7 @@ export interface Artwork {
     note?: string;
   } | null;
   image: {
+    provenance?: 'museum' | 'user-supplied';
     src: string;
     alt: string;
     source: string;

@@ -93,7 +93,12 @@ export type Action =
   | { type: 'next'; artworkId: string }
   | { type: 'bookmark'; artworkId: string }
   | { type: 'height'; heightCm: number | null; units: 'cm' | 'ft' }
-  | { type: 'begin'; heightCm?: number | null; units?: 'cm' | 'ft' };
+  | {
+      type: 'begin';
+      artworkId?: string;
+      heightCm?: number | null;
+      units?: 'cm' | 'ft';
+    };
 export function reducer(state: GalleryState, action: Action): GalleryState {
   const v = state.current;
   const update = (patch: Partial<Visit>): GalleryState => ({
@@ -172,6 +177,10 @@ export function reducer(state: GalleryState, action: Action): GalleryState {
       return {
         ...state,
         onboarded: true,
+        current:
+          action.artworkId && !state.onboarded
+            ? newVisit(action.artworkId)
+            : state.current,
         heightCm: action.heightCm ?? null,
         units: action.units ?? state.units,
       };

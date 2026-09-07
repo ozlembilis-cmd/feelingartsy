@@ -43,3 +43,9 @@ personHeightPx = personHeightCm × scale
 “Not recorded” is distinct from “Nothing in particular.” The reducer freezes first responses when context appears. To revise the journey, keep these invariants and preserve separate visit IDs. Never populate personal responses from example values.
 
 After editing, run `npm test`, `npm run lint`, and `npm run build`. Inspect representative portrait, landscape, square, and very wide works. Keep the image credit accessible before any attribution reveal. Local personal state must never enter content files, logs, analytics, or requests to outside services.
+
+## Owner-supplied photographs
+
+Guernica is the one `image.provenance: "user-supplied"` entry. Its source and permission record are local files, linked from Sources. Its image is used at the photographer/site owner’s explicit request in the private gallery; do not relabel it public domain or imply public redistribution rights. The photograph includes the museum setting and perspective, so `dimensions` stays null while `verifiedArtworkDimensions` preserves the sourced canvas measurements. The historical priority research record describes the former rights-pending state; `guernica-user-photo.md` records the current supplied asset.
+
+The intro’s curated image list is in `src/components/ArtIntro.tsx`. Its images come from the same live content records; replacing an asset there also updates the viewer. `src/immersive.css` controls the new opening and ambient gallery layout.
