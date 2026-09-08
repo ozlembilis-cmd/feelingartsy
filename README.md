@@ -23,6 +23,12 @@ npm run preview
 
 The deployment output is `dist/client/` for the gallery and `dist/server/index.js` for its Cloudflare-compatible Worker. `.openai/hosting.json` retains the existing private Sites project. The gallery and local first-impressions summary need no API key. AI generation requires server-only Mistral configuration; see `AI-PROFILE-GUIDE.md` and `.env.example`. `npm run dev` serves the gallery and local API; `npm run preview` previews the static frontend only.
 
+## Railway hosting
+
+The connected Railway service deploys GitHub `main`. `railway.json` runs `npm run build`, starts the production Node server with `npm start`, and checks `/healthz` before routing traffic. The server binds `0.0.0.0` on Railway's `PORT`, serves only `dist/client` assets, and runs the existing profile handler. The health response includes Railway's deployed commit SHA. This avoids treating the nested build output as a flat static site, which returned 404 at the homepage.
+
+The public gallery is https://feelingartsy-production.up.railway.app/. Railway secrets are separate from the local `.env` and Sites settings. AI remains optional and unavailable without its server configuration; the local summary continues to work. The Node adapter reads Railway's edge-supplied client IP for the existing best-effort burst limiter and handles graceful shutdown. No database or paid model fallback was added.
+
 ## What is included
 
 - A full, sharp painting surrounded by a blurred extension of the same image, with compact icon controls.

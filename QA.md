@@ -60,3 +60,9 @@ Verified the new How it works dialog from the gallery, its mobile 390×844 layou
 ## Intro layout and AI fallback copy — 7 September 2026
 
 Removed the visible click-anywhere instruction while preserving background and painting entry. How it works is the only centered footer control; Create my art profile precedes Something new in the right-hand row. Under 900px the profile uses an accessible palette icon and the existing tooltip; under 650px credits and playback move to the upper corner. AI-unavailable copy explains that the local summary continues to update. No browser interaction or visual QA was performed for this update; validation uses the existing regression tests, compilation, and a non-browser route check.
+
+## Railway production server — 7 September 2026
+
+Railway reported the intro update as deployed, but the public homepage and profile endpoint returned 404. Added an explicit production Node entrypoint and Railway configuration to serve the nested client build alongside the existing profile API. A real HTTP regression test covers homepage and asset responses, HEAD, health/revision, API body forwarding and trusted origin, client-IP normalization, forbidden private paths and escaping symlinks, missing files, and unsupported methods. No model-provider call is made by these tests.
+
+All 25 tests pass. The production build and lint pass. A local run of the actual `npm start` command served the built homepage, JavaScript, CSS, Starry Night image, and supplied Guernica photograph with HTTP 200. `/api/art-profile` returned `{ "available": false }`, `/healthz` returned 200, and requests for `.env` and server source returned 404.
