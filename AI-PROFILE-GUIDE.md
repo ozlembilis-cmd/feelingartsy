@@ -4,7 +4,7 @@
 
 “I chose Mistral Small 4 as the first model to evaluate for this prototype. It has open weights, a hosted API, and structured outputs that fit a short art-profile feature. I am starting with free API usage and checking whether the profiles stay grounded in the visitor’s actual choices. I have not yet established that it performs better than other models.”
 
-This is a selection rationale, not a claim that the model is an art expert. The account’s actual free access must be checked before activation. The integration is implemented, but live generation and comparisons between models have not been tested without an account and key.
+This is a selection rationale, not a claim that the model is an art expert. The integration is implemented, but successful live generation and comparisons between models remain unverified. On 7 September 2026, the local key authenticated and Free mode with pay-as-you-go disabled was confirmed. Synthetic generation requests returned HTTP 429; Mistral's [status page](https://status.mistral.ai/) reported its free API temporarily disabled. Production AI remains disconnected. The local summary stays available, clearly labelled “no AI used.”
 
 ## Start with the task
 

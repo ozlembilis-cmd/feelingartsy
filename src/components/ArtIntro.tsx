@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Pause, Play, Shuffle, Info } from 'lucide-react';
+import { Palette, Pause, Play, Shuffle, Info } from 'lucide-react';
 import { IconButton } from './Hint';
 import type { Artwork } from '../content/types';
 
@@ -155,21 +155,19 @@ export function ArtIntro({
         artsy?
       </h1>
       <div className="intro-footer">
-        <div className="intro-entry-copy">
-          <button className="intro-prompt" onClick={() => onEnter()}>
-            {returning
-              ? 'Click anywhere to continue'
-              : 'Click anywhere to begin'}{' '}
-            <ArrowUpRight />
-          </button>
-          <button className="intro-how" onClick={onHelp}>
-            How it works
-          </button>
-          <button className="intro-how" onClick={onProfile}>
-            Create my art profile
-          </button>
-        </div>
+        <button className="intro-how" onClick={onHelp}>
+          How it works
+        </button>
         <div className="intro-utilities">
+          <IconButton
+            className="intro-profile"
+            title="Create my art profile"
+            aria-label="Create my art profile"
+            onClick={onProfile}
+          >
+            <Palette aria-hidden="true" />
+            <span>Create my art profile</span>
+          </IconButton>
           {returning && (
             <IconButton
               className="icon-control"
@@ -180,24 +178,26 @@ export function ArtIntro({
               <Shuffle />
             </IconButton>
           )}
-          <IconButton
-            className="icon-control"
-            title="Collection & image credits"
-            aria-label="Collection and image credits"
-            onClick={onCredits}
-          >
-            <Info />
-          </IconButton>
-          {!reduced && (
+          <div className="intro-meta">
             <IconButton
               className="icon-control"
-              title={paused ? 'Play animation' : 'Pause animation'}
-              aria-label={paused ? 'Play animation' : 'Pause animation'}
-              onClick={() => setPaused((v) => !v)}
+              title="Collection & image credits"
+              aria-label="Collection and image credits"
+              onClick={onCredits}
             >
-              {paused ? <Play /> : <Pause />}
+              <Info />
             </IconButton>
-          )}
+            {!reduced && (
+              <IconButton
+                className="icon-control"
+                title={paused ? 'Play animation' : 'Pause animation'}
+                aria-label={paused ? 'Play animation' : 'Pause animation'}
+                onClick={() => setPaused((v) => !v)}
+              >
+                {paused ? <Play /> : <Pause />}
+              </IconButton>
+            )}
+          </div>
         </div>
       </div>
     </section>

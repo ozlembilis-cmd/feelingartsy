@@ -82,28 +82,53 @@
   bottom: max(30px, env(safe-area-inset-bottom));
   left: 36px;
   right: 36px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 16px;
   align-items: center;
-  justify-content: center;
   pointer-events: none;
 }
 .intro-footer button {
   pointer-events: auto;
 }
-.intro-prompt {
-  gap: 14px;
-  font-size: 0.875rem;
-  color: #bdbdb9;
-  letter-spacing: 0.01em;
-}
-.intro-prompt svg {
-  width: 16px;
-}
 .intro-utilities {
-  position: absolute;
-  right: 0;
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.intro-meta {
   display: flex;
   gap: 4px;
+}
+.intro-profile {
+  min-height: 44px;
+  padding: 0 12px;
+  color: #bdbdb9;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+.intro-profile:hover {
+  color: #f7f6f2;
+}
+.intro-profile svg {
+  display: none;
+}
+@media (max-width: 900px) {
+  .intro-profile {
+    width: 44px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .intro-profile span {
+    display: none;
+  }
+  .intro-profile svg {
+    display: block;
+    width: 19px;
+    height: 19px;
+  }
 }
 .icon-control {
   width: 44px;
@@ -524,17 +549,15 @@
     left: 18px;
     right: 18px;
     bottom: max(20px, env(safe-area-inset-bottom));
-    justify-content: flex-start;
-  }
-  .intro-prompt {
-    font-size: 0.8125rem;
-    gap: 6px;
+    gap: 8px;
   }
   .intro-utilities {
     gap: 0;
   }
-  .intro-utilities .icon-control {
-    width: 36px;
+  .intro-meta {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: 18px;
   }
   .immersive-gallery {
     min-height: 700px;
@@ -656,26 +679,6 @@
     will-change: auto;
   }
 }
-/* Let the small entry prompt wrap beside its tools when text is enlarged. */
-.intro-footer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
-}
-.intro-prompt {
-  justify-self: center;
-  min-width: 0;
-}
-.intro-utilities {
-  position: static;
-}
-@media (max-width: 650px) {
-  .intro-prompt {
-    justify-self: start;
-    text-align: left;
-  }
-}
-
 /* A quiet, reusable explanation for each icon, on hover and keyboard focus. */
 .icon-tooltip[data-slot='tooltip-content'] {
   display: flex;
@@ -715,14 +718,9 @@ button[aria-disabled='true'] {
   opacity: 0.45;
   cursor: not-allowed;
 }
-.intro-entry-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
-}
 .intro-how {
-  min-height: 32px;
+  grid-column: 2;
+  min-height: 44px;
   padding: 0 8px;
   font-size: 0.8125rem;
   color: #a3a39d;
@@ -811,12 +809,6 @@ button[aria-disabled='true'] {
   font-size: 0.875rem;
 }
 @media (max-width: 650px) {
-  .intro-entry-copy {
-    align-items: flex-start;
-  }
-  .intro-how {
-    padding-left: 0;
-  }
   .how-dialog.gallery-dialog[data-slot] {
     padding: 26px;
     width: calc(100% - 28px);

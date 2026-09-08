@@ -119,7 +119,7 @@ export function ArtProfilePanel({
       if (!response.ok) {
         throw new Error(
           response.status === 429
-            ? 'Profiles are taking a little breather. Please try again later.'
+            ? 'AI interpretation is unavailable right now. Your first impressions are still here.'
             : response.status === 503
               ? 'AI profiles aren’t available just yet. Your choices are still here.'
               : 'Your profile couldn’t be created this time. Please try again.',
@@ -277,7 +277,7 @@ export function ArtProfilePanel({
                 </p>
               </div>
             )}
-            {evidence.length > PROFILE_MAX_ARTWORKS && (
+            {available && evidence.length > PROFILE_MAX_ARTWORKS && (
               <p className="profile-small">
                 The AI profile uses your latest {PROFILE_MAX_ARTWORKS} artworks
                 with selections.
@@ -311,8 +311,8 @@ export function ArtProfilePanel({
             )}
             {available === false && evidence.length > 0 && (
               <output className="profile-small">
-                AI profiles aren’t connected yet. Your first impressions will
-                keep growing.
+                AI interpretation is currently unavailable. This summary updates
+                as you explore.
               </output>
             )}
             {error && (
